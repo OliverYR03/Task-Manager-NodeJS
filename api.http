@@ -1,0 +1,28 @@
+
+### Registrar usuario
+POST http://localhost:1234/api/register
+{
+  "username": "test2",
+  "email": "test2@gmail.com",
+  "password": "test2"
+
+}
+
+### Logear usuario
+POST http://localhost:1234/api/login
+{
+
+  "email": "test2@gmail.com",
+  "password": "test2"
+
+}
+
+## Logout
+
+POST http://localhost:1234/api/logout
+{
+
+  "email": "test2@gmail.com",
+  "password": "test2"
+
+}
