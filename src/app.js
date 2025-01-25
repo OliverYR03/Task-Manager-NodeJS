@@ -5,6 +5,7 @@ import { corsMiddleware } from './middlewares/cors.js'
 
 import authRoutes from './routes/auth.routes.js'
 import taskRoutes from './routes/task.routes.js'
+import statusRoutes from './routes/status.routes.js'
 
 export const app = express()
 
@@ -17,6 +18,7 @@ app.use(corsMiddleware())
 
 app.use('/api/',    authRoutes)
 app.use('/api/',    taskRoutes)
+app.use('/api/',    statusRoutes)
 
 app.get('/', (req, res) => {
     res.send('Hello World!')

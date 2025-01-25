@@ -5,7 +5,7 @@ import  jwt  from "jsonwebtoken"
 import { TOKEN_SECRET } from "../config.js"
 
 export const register = async(req, res) => {
-    const {username, email, password,} = req.body
+    const {firstname, lastname, username, email, password,} = req.body
    
    try {
     const userFound = await User.findOne({email})
@@ -14,6 +14,8 @@ export const register = async(req, res) => {
     const passwordHash = await bcrypt.hash(password, 10)
 
     const newUser = new User ({
+        firstname,
+        lastname,
         username,
         email,
         password: passwordHash,
@@ -24,6 +26,8 @@ export const register = async(req, res) => {
    res.cookie("token", token)
     res.json({
      id: userSaved.id,
+     firstname: userSaved.firstname,
+     lastname: userSaved.lastname,
      username: userSaved.username,
      email: userSaved.email,
      createdAt: userSaved.createdAt,
@@ -57,6 +61,8 @@ export const login = async(req, res) => {
         })
     res.json({
         id: userFound.id,
+        firstname: userFound.firstname,
+        lastname: userFound.lastname,
         username: userFound.username,
         email: userFound.email,
         createdAt: userFound.createdAt,
@@ -82,6 +88,8 @@ export const profile = async (req, res) => {
 
     return res.json({
         id: userFound._id,
+        firstname: userFound.firstname,
+        lastname: userFound.lastname,
         username: userFound.username,
         email: userFound.email,
         createdAt: userFound.createdAt,
@@ -101,8 +109,17 @@ export const verifyToken = async (req, res) => {
   
       return res.json({
         id: userFound._id,
+        firstname: userFound.firstname,
+        lastname: userFound.lastname,
         username: userFound.username,
         email: userFound.email,
       });
     });
+  };
+  export const updateUser = async (req, res) => {
+    const user = await User.findByIdAndUpdate(req.user.id, req.body, {
+      new: true,
+    });
+    if (!task) return res.status(404).json({ message: "User not found" });
+    res.json(user);
   };
