@@ -20,13 +20,13 @@ const taskSchema = new mongoose.Schema(
             required: true
         },
         status: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Status', 
+            type: String,
+            default: 'Not Started',
             required: true
         },
         priority: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Priority', 
+            type: String,
+            default: 'Low', 
             required: true, 
         }
     },

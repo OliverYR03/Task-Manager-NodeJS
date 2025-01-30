@@ -1,13 +1,9 @@
 import Task from "../models/task.model.js";
-import Priority from '../models/priority.model.js';
-import Status from '../models/status.model.js'
 
 export const getTasks = async (req, res) => {
   try {
     const tasks = await Task.find({ user: req.user.id })
       .populate("user")
-      .populate("status")
-      .populate("priority");
     res.json(tasks);
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -27,23 +23,14 @@ export const getTask = async (req, res) => {
 
 
 export const createTask = async (req, res) => {
-    const { title, description, date, priorityId, statusId } = req.body;
-
 try {
-    const priority = await Priority.findOne({ id: priorityId });
-    const status = await Status.findOne({ id: statusId });
-
-    if (!priority || !status) {
-        return res.status(400).json({ success: false, message: 'Priority or Status not found' });
-    }
-
     const newTask = new Task({
       title,
       description,
       date,
       user: req.user.id,
-      priority: priority._id, 
-      status: status._id,     
+      priority,
+      status    
   });
 
   const savedTask = await newTask.save();
