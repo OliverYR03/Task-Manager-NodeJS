@@ -1,6 +1,6 @@
 import Status from "../models/status.model.js";
 
-export const getStatus = async (req, res) => {
+export const getStatuses = async (req, res) => {
   try {
     const status = await Status.find();
     if (!status) return res.status(404).json({ message: "Task not found" });
@@ -9,6 +9,19 @@ export const getStatus = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const getStatus = async (req, res) => {
+    try {
+      const { id } = req.params; 
+      const status = await Status.findById(id);
+      if (!status) {
+        return res.status(404).json({ message: "Status not found" }); 
+      }
+      return res.json(status); 
+    } catch (error) {
+      return res.status(500).json({ message: error.message }); 
+    }
+  };
 
 export const createStatus = async (req, res) => {
   try {

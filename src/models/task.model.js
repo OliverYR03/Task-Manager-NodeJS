@@ -22,8 +22,7 @@ const taskSchema = new mongoose.Schema(
         status: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Status', 
-            required: true, 
-
+            required: true
         },
         priority: {
             type: mongoose.Schema.Types.ObjectId,
