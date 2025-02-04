@@ -9,10 +9,8 @@ export const createTaskSchema = z.object({
   }),
   date: z.string().datetime().optional(),
   status: z.string({
-      required_error: "Status is required",
-  }).nonempty("Status cannot be empty"),
+  }).nonempty("Status cannot be empty").optional(),
   priority: z.string({
-      required_error: "Priority is required",
-    })
-    .nonempty("Priority cannot be empty"),
+    required_error: "Status is required",
+  }).optional()
 });

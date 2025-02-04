@@ -1,9 +1,9 @@
+import mongoose from "mongoose";
 import Task from "../models/task.model.js";
 
 export const getTasks = async (req, res) => {
   try {
-    const tasks = await Task.find({ user: req.user.id })
-      .populate("user")
+    const tasks = await Task.find({ user: req.user.id }).populate("user");
     res.json(tasks);
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -20,39 +20,52 @@ export const getTask = async (req, res) => {
   }
 };
 
-
-
 export const createTask = async (req, res) => {
-try {
+  const { title, description, date, priority, status } = req.body;
+
+  try {
     const newTask = new Task({
       title,
       description,
       date,
       user: req.user.id,
       priority,
-      status    
-  });
+      status,
+    });
 
-  const savedTask = await newTask.save();
+    const savedTask = await newTask.save();
 
-  res.status(201).json({
+    res.status(201).json({
       success: true,
       data: savedTask,
-  });
-} catch (error) {
-  console.error(error);
-  res.status(500).json({
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
       success: false,
-      message: error.message || 'An error occurred while creating the task',
-  });
-}
+      message: error.message || "An error occurred while creating the task",
+    });
+  }
 };
 
-
 export const deleteTask = async (req, res) => {
-  const task = await Task.findByIdAndDelete(req.params.id);
-  if (!task) return res.status(404).json({ message: "Task not found" });
-  return res.status(204).json({ message: "Task eliminated succesfuly" });
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid ID format" });
+    }
+
+    const task = await Task.findByIdAndDelete(id);
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    return res.status(200).json({ message: "Task eliminated successfully" });
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 export const updateTask = async (req, res) => {
@@ -62,4 +75,3 @@ export const updateTask = async (req, res) => {
   if (!task) return res.status(404).json({ message: "Task not found" });
   res.json(task);
 };
-

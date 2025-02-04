@@ -22,12 +22,10 @@ const taskSchema = new mongoose.Schema(
         status: {
             type: String,
             default: 'Not Started',
-            required: true
         },
         priority: {
             type: String,
             default: 'Low', 
-            required: true, 
         }
     },
     {
