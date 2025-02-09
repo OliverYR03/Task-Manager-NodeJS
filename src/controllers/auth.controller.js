@@ -5,7 +5,7 @@ import  jwt  from "jsonwebtoken"
 import { TOKEN_SECRET } from "../config.js"
 
 export const register = async(req, res) => {
-    const {firstname, lastname, username, email, password,} = req.body
+    const {firstname, lastname, username, email, password} = req.body
    
    try {
     const userFound = await User.findOne({email})
@@ -112,6 +112,7 @@ export const verifyToken = async (req, res) => {
         firstname: userFound.firstname,
         lastname: userFound.lastname,
         username: userFound.username,
+        img: userFound.img,
         email: userFound.email,
       });
     });
