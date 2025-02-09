@@ -8,9 +8,13 @@ export const createTaskSchema = z.object({
     required_error: "Description must be a string",
   }),
   date: z.string().datetime().optional(),
-  status: z.string({
-  }).nonempty("Status cannot be empty").optional(),
+  status: z.string().optional(),
   priority: z.string({
-    required_error: "Status is required",
-  }).optional()
+    required_error: "Priority is required",
+  }).optional(),
+  img: z.string().optional().refine((val) => {
+    return val === "" || /^data:image\/[a-zA-Z]+;base64,/.test(val);
+  }, {
+    message: "Image must be in base64 format",
+  })
 });

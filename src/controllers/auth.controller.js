@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs'
 import { createAccessToken } from "../libs/jwt.js"
 import  jwt  from "jsonwebtoken"
 import { TOKEN_SECRET } from "../config.js"
+import mongoose from "mongoose"
 
 export const register = async(req, res) => {
     const {firstname, lastname, username, email, password,} = req.body
@@ -19,6 +20,7 @@ export const register = async(req, res) => {
         username,
         email,
         password: passwordHash,
+        img
    });
 
    const userSaved = await newUser.save();
@@ -29,12 +31,13 @@ export const register = async(req, res) => {
      firstname: userSaved.firstname,
      lastname: userSaved.lastname,
      username: userSaved.username,
+     img : userSaved.img,
      email: userSaved.email,
      createdAt: userSaved.createdAt,
      updatedAt: userSaved.updatedAt,
     })
    } catch (e) {
-       console.log(e)
+       console.log("Error: ", e)
    }
 }
 
@@ -45,10 +48,10 @@ export const login = async(req, res) => {
 
     const userFound = await User.findOne({email})
 
-    if (!userFound) return res.status(400).json({ message: "User not found"});
+    if (!userFound) return res.status(400).json(["Email not found"]);
 
     const isMatch = await bcrypt.compare(password, userFound.password)
-    if (!isMatch) return res.status(400).json({ message: "Incorrect password"})
+    if (!isMatch) return res.status(400).json(["Incorrect password"])
 
     const token = await createAccessToken({id: userFound.id})
 
@@ -64,6 +67,7 @@ export const login = async(req, res) => {
         firstname: userFound.firstname,
         lastname: userFound.lastname,
         username: userFound.username,
+        img: userFound.img,
         email: userFound.email,
         createdAt: userFound.createdAt,
         updatedAt: userFound.updatedAt,
@@ -84,7 +88,7 @@ export const logout = (req, res) => {
 export const profile = async (req, res) => {
     const userFound = await User.findById(req.user.id)
 
-    if( !userFound) return res.status(400).json({ message: "User not found"})
+    if( !userFound) return res.status(400).json(["User not found"])
 
     return res.json({
         id: userFound._id,
@@ -92,6 +96,7 @@ export const profile = async (req, res) => {
         lastname: userFound.lastname,
         username: userFound.username,
         email: userFound.email,
+        img: userFound.img,
         createdAt: userFound.createdAt,
         updatedAt: userFound.updatedAt,
     })
@@ -117,9 +122,16 @@ export const verifyToken = async (req, res) => {
     });
   };
   export const updateUser = async (req, res) => {
-    const user = await User.findByIdAndUpdate(req.user.id, req.body, {
-      new: true,
-    });
-    if (!task) return res.status(404).json({ message: "User not found" });
+    const { id } = req.params;
+  
+    // Verifica si el id es un ObjectId válido
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid ID format" });
+    }
+  
+    const user = await User.findByIdAndUpdate(id, req.body, { new: true });
+  
+    if (!user) return res.status(404).json({ message: "User not found" });
+  
     res.json(user);
   };
