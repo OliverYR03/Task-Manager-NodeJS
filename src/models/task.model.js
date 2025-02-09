@@ -26,6 +26,10 @@ const taskSchema = new mongoose.Schema(
         priority: {
             type: String,
             default: 'Low', 
+        },
+        img: {
+            type: String,
+            default:""
         }
     },
     {

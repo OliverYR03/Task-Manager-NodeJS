@@ -21,16 +21,17 @@ export const getTask = async (req, res) => {
 };
 
 export const createTask = async (req, res) => {
-  const { title, description, date, priority, status } = req.body;
+  const { title, description, date, priority, status, img } = req.body;
 
   try {
     const newTask = new Task({
       title,
       description,
       date,
-      user: req.user.id,
       priority,
       status,
+      user: req.user.id,
+      img: img || "",  // Guardamos la imagen si está presente, de lo contrario lo dejamos vacío.
     });
 
     const savedTask = await newTask.save();
@@ -48,13 +49,10 @@ export const createTask = async (req, res) => {
   }
 };
 
+
 export const deleteTask = async (req, res) => {
   try {
     const { id } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ message: "Invalid ID format" });
-    }
 
     const task = await Task.findByIdAndDelete(id);
     if (!task) {
@@ -63,7 +61,6 @@ export const deleteTask = async (req, res) => {
 
     return res.status(200).json({ message: "Task eliminated successfully" });
   } catch (error) {
-    console.error("Error deleting task:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };

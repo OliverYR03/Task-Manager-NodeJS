@@ -17,8 +17,8 @@ router.post("/register", validateSchema(registerSchema), register);
 router.post("/login", validateSchema(loginSchema), login);
 router.post("/logout", logout);
 
-router.patch("/profile",authRequired, validateSchema(profileSchema), updateUser )
+router.put('/profile/:id',authRequired, validateSchema(profileSchema), updateUser )
 router.get("/verify", verifyToken);
-router.get("/profile", authRequired, profile);
+router.get("/profile/:id", authRequired, profile);
 
 export default router;
