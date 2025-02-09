@@ -55,8 +55,7 @@ export const login = async(req, res) => {
 
 
     res.cookie("token", token, {
-        httpOnly: true,  // Seguridad: evita acceso con JavaScript en frontend
-        secure: process.env.NODE_ENV === "production",  // Solo usa secure en producción
+        httpOnly: true,  
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",  // "none" para cross-site, "lax" para local
       });
       
