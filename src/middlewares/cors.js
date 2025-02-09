@@ -5,6 +5,7 @@ const ACCEPTED_ORIGINS = [
     'http://localhost:1234',
     'http://localhost:5173',
     'https://localhost:5173',
+    "https://task-manager-nodejs-bvjh.onrender.com",
     "https://task-manager-react-iz4u.onrender.com"
     
   ]
