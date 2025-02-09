@@ -1,8 +1,13 @@
 import cors from 'cors'
-import dotenv from 'dotenv';
-dotenv.config();
 
-const ACCEPTED_ORIGINS = process.env.ACCEPTED_ORIGINS.split(',')
+const ACCEPTED_ORIGINS = [
+    'http://localhost:8080',
+    'http://localhost:1234',
+    'http://localhost:5173',
+    'https://localhost:5173',
+    "https://task-manager-react-iz4u.onrender.com"
+    
+  ]
 
 export const corsMiddleware = (acceptedOrigins = ACCEPTED_ORIGINS) => cors({
     origin: (origin, callback) => {
