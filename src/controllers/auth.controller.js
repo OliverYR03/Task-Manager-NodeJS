@@ -58,8 +58,10 @@ export const login = async(req, res) => {
 
 
     res.cookie("token", token,{
-
-        })
+        httpOly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "none",
+        })  
     res.json({
         id: userFound.id,
         firstname: userFound.firstname,
