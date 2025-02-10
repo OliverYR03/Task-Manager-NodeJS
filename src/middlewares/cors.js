@@ -1,15 +1,9 @@
 import cors from 'cors'
 
-const ACCEPTED_ORIGINS = [
-    'http://localhost:8080',
-    'https://task-manager-nodejs-bvjh.onrender.com',
-    'https://task-manager-react-iz4u.onrender.com',
-    'http://localhost:1234',
-    'http://localhost:5173'
+const ACCEPTED_ORIGINS = process.env.ACCEPTED_ORIGINS
+  
 
-  ]
-
-export const corsMiddleware = (acceptedOrigins = ACCEPTED_ORIGINS) => cors({
+export const corsMiddleware = (acceptedOrigins = ACCEPTED_ORIGINS.parse(",")) => cors({
     origin: (origin, callback) => {
         if (ACCEPTED_ORIGINS.includes(origin)) {
           return callback(null, true)
